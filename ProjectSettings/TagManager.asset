@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bullet
   - Melee
+  - Explosion
   layers:
   - Default
   - TransparentFX

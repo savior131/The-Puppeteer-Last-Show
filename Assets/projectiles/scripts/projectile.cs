@@ -9,37 +9,57 @@ public class Projectile : MonoBehaviour, IParriable
     [SerializeField] private bool enableWave = false;
     [SerializeField] private float waveFrequency = 5f;
     [SerializeField] private float waveAmplitude = 1f;
-    [SerializeField] private bool freezeRotationXZ = true;
     [SerializeField] private float waveDelay = 0.5f;
+    [SerializeField] private bool freezeRotationXZ = true;
+    [SerializeField] private bool enableTracking = false;
+    [SerializeField] private float trackingDelay = 1f;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float trackingRange = 100f;
     [SerializeField] private float bulletDamage = 5.0f;
-    private Transform returnTarget;
+    [SerializeField] private float maxParryRandomAngle = 4f;
 
+    private Transform returnTarget;
+    private Gravity gravity;
+    private Rigidbody rb;
+    private Transform player;
+    private Vector3 initialDirection;
+    private float startTime;
     private float phaseOffset;
     private bool waveActive;
-    private Rigidbody rb;
-    private float startTime;
-    private Vector3 initialDirection;
+    private bool isParried = false;
+    private bool hasTracked = false;
+
     public float damage => bulletDamage;
-    
-   
 
     void Awake()
     {
-        startTime = Time.time;
-        phaseOffset = Random.Range(0f, Mathf.PI * 2);
-
+        gravity = GetComponent<Gravity>();
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();
         }
+
         rb.useGravity = false;
-        if (freezeRotationXZ)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
-        }
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        if (freezeRotationXZ)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+
+        startTime = Time.time;
+        phaseOffset = Random.Range(0f, Mathf.PI * 2);
+
+        if (enableTracking)
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position, trackingRange, playerLayer);
+            if (hits.Length > 0)
+            {
+                player = hits[0].transform;
+            }
+        }
     }
 
     void Start()
@@ -52,41 +72,68 @@ public class Projectile : MonoBehaviour, IParriable
             initialVelocity += Vector3.up * upwardForce;
         }
 
-        rb.linearVelocity = initialVelocity;
+        rb.AddForce(initialVelocity, ForceMode.VelocityChange);
         Destroy(gameObject, lifeTime);
     }
 
     void FixedUpdate()
     {
-        if (enableWave && Time.time >= startTime + waveDelay)
+        if (enableWave && Time.time >= startTime + waveDelay && !isParried)
         {
             waveActive = true;
         }
 
-        if (enableWave && waveActive)
+        if (waveActive && !isParried)
         {
-            float timeSinceStart = Time.time - startTime - waveDelay;
-            float waveOffset = Mathf.Sin(timeSinceStart * waveFrequency + phaseOffset) * waveAmplitude;
-            rb.linearVelocity = (initialDirection * speed) + (transform.right * waveOffset);
+            float timeSinceWaveStart = Time.time - startTime - waveDelay;
+            float waveOffset = Mathf.Sin(timeSinceWaveStart * waveFrequency + phaseOffset) * waveAmplitude;
+            Vector3 waveForce = transform.right * waveOffset;
+            rb.AddForce(waveForce, ForceMode.Acceleration);
+        }
+
+        if (enableTracking && !hasTracked && !isParried && Time.time >= startTime + trackingDelay && player != null)
+        {
+            if (gravity != null)
+            {
+                gravity.enabled = false;
+            }
+            Vector3 dir = (player.position - transform.position).normalized;
+            rb.linearVelocity = dir * speed;
+            transform.forward = dir;
+            hasTracked = true;
         }
     }
+
     public void OnParried()
     {
+        isParried = true;
+
+        if (gravity != null)
+        {
+            gravity.enabled = false;
+        }
+
+        Vector3 targetDir;
         if (returnTarget != null)
         {
-            Vector3 directionToTarget = (returnTarget.position - transform.position).normalized;
-            rb.linearVelocity = directionToTarget * speed;
-            transform.forward = directionToTarget;
+            targetDir = (returnTarget.position - transform.position).normalized;
         }
         else
         {
-            Vector3 oppositeDirection = -rb.linearVelocity.normalized;
-            rb.linearVelocity = oppositeDirection * speed;
-            transform.forward = oppositeDirection;
+            targetDir = -transform.forward;
         }
+
+        float randomAngle = Random.Range(-maxParryRandomAngle, maxParryRandomAngle);
+        Quaternion randomRot = Quaternion.AngleAxis(randomAngle, Vector3.up);
+        Vector3 randomizedDir = randomRot * targetDir;
+
+        rb.linearVelocity = randomizedDir * speed;
+        transform.forward = randomizedDir;
     }
+
+
     public void setReturnTarget(Transform target)
     {
         returnTarget = target;
-    } 
+    }
 }

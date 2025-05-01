@@ -15,6 +15,7 @@ public class Movement : MonoBehaviour
     private Rigidbody rb;
     private Gravity gravity;
     private Stamina stamina;
+    private AnimationLock animationLock;
     private Vector3 moveInput;
     private bool isSprinting;
     private float moveX, moveZ;
@@ -25,6 +26,7 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gravity = GetComponent<Gravity>();
         stamina = GetComponent<Stamina>();
+        animationLock = GetComponent<AnimationLock>();
     }
 
     void Update()
@@ -46,12 +48,12 @@ public class Movement : MonoBehaviour
         {
             speedUpParticles.Stop();
         }
-
-        if (Input.GetKeyDown(KeyCode.Space) && gravity.OnGround)
+        if (Input.GetKeyDown(KeyCode.Space) && gravity.OnGround && (animationLock == null || animationLock.canMove))
         {
             Jump();
             stamina.DrainChunk(5);
         }
+
 
         animator.SetBool("isGrounded", gravity.OnGround);
         float speed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
@@ -67,7 +69,13 @@ public class Movement : MonoBehaviour
 
     void HandleMovement()
     {
-        stamina.gradualDraining(isSprinting&& moveInput.sqrMagnitude > 0.1f, Time.deltaTime);
+        if (animationLock != null && !animationLock.canMove)
+        {
+            stamina.gradualDraining(false, Time.deltaTime);
+            return;
+        }
+        stamina.gradualDraining(isSprinting && moveInput.sqrMagnitude > 0.1f, Time.deltaTime);
+
         if (moveInput.sqrMagnitude > 0)
         {
             Vector3 force = moveInput * (moveForce * currentSprintFactor);
@@ -87,19 +95,24 @@ public class Movement : MonoBehaviour
 
     void ApplyDeceleration()
     {
-        if (gravity.OnGround)
-        {
-            Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            float deceleration = moveInput.sqrMagnitude > 0 ? movingDecelerationRate : decelerationRate;
-            Vector3 decelerationForce = -horizontalVelocity.normalized * deceleration;
-            rb.AddForce(decelerationForce, ForceMode.Force);
+        if (!gravity.OnGround) return;
 
-            if (horizontalVelocity.magnitude < 0.05f)
-            {
-                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            }
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+
+        bool isTryingToMove = moveInput.sqrMagnitude > 0.1f;
+        bool canMove = animationLock == null || animationLock.canMove;
+
+        float deceleration = (!canMove || !isTryingToMove) ? decelerationRate : movingDecelerationRate;
+
+        Vector3 decelerationForce = -horizontalVelocity.normalized * deceleration;
+        rb.AddForce(decelerationForce, ForceMode.Force);
+
+        if (horizontalVelocity.magnitude < 0.05f)
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }
     }
+
 
     void Jump()
     {

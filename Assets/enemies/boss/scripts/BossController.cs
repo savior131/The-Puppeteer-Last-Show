@@ -5,18 +5,19 @@ using System.Collections.Generic;
 public class BossController : MonoBehaviour
 {
     [SerializeField] private GameObject phasesContainer;
+    [SerializeField] private Animator animator;
     private List<BossPhase> phases = new List<BossPhase>();
     private int currentPhaseIndex;
     private BossPhase currentPhase;
-    private AngleRotation angleRotation;
-    private Transform bossTransform;
+
     private void Awake()
     {
         if (phasesContainer != null)
         {
             phases.AddRange(phasesContainer.GetComponents<BossPhase>());
         }
-        
+
+
     }
     void Start()
     {
@@ -24,8 +25,6 @@ public class BossController : MonoBehaviour
         {
             SetPhase(0);
         }
-        bossTransform = transform.CopyTransform();
-        bossTransform.position += Vector3.up * 1.5f;
     }
 
     void Update()
@@ -40,6 +39,14 @@ public class BossController : MonoBehaviour
             SetPhase(currentPhaseIndex + 1);
         }
     }
+    public int getPhases()
+    {
+        return phases.Count;
+    }
+    public int getCurrentPhaseIndex()
+    {
+        return currentPhaseIndex;
+    }
 
     private void SetPhase(int index)
     {
@@ -49,10 +56,24 @@ public class BossController : MonoBehaviour
         }
         currentPhaseIndex = index;
         currentPhase = phases[index];
-        currentPhase.Initialize(this,bossTransform);
+        
+        currentPhase.Initialize(this,animator);
         currentPhase.StartPhase();
     }
-
+    public void OnDeath()
+    {
+        if (currentPhase != null)
+        {
+            currentPhase.EndPhase();
+        }
+    }
+    public Transform GetBossTransform()
+    {
+        Transform bossTransform;
+        bossTransform = transform.CopyTransform();
+        bossTransform.position += Vector3.up * 1.5f;
+        return bossTransform;
+    }
     public AngleRotation GetAngleRotation()
     {
         return GetComponent<AngleRotation>();

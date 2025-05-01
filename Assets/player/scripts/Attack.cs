@@ -23,7 +23,6 @@ public class Attack : MonoBehaviour
                 TryAttack();
             }
         }
-        Debug.Log(inputBuffer);
     }
 
     public void TryAttack()

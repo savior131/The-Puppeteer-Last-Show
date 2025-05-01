@@ -4,35 +4,64 @@ public class AngleRotation : MonoBehaviour
 {
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private bool invertRotation = false;
-    [SerializeField] private new Transform transform;
+    [SerializeField] private Transform yAxisTarget;
+    [SerializeField] private Transform xAxisTarget;
 
-    private Quaternion targetRotation;
-    private bool rotating;
+    private Quaternion yTargetRotation;
+    private Quaternion xTargetRotation;
+
+    private bool rotatingY;
+    private bool rotatingX;
 
     void Start()
     {
-        targetRotation = transform.rotation;
+        if (yAxisTarget == null) yAxisTarget = transform;
+        if (xAxisTarget == null) xAxisTarget = transform;
+
+        yTargetRotation = yAxisTarget.rotation;
+        xTargetRotation = xAxisTarget.rotation;
     }
 
     void Update()
     {
-        if (rotating)
+        if (rotatingX)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-
-            if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
+            xAxisTarget.localRotation = Quaternion.Slerp(xAxisTarget.localRotation, xTargetRotation, rotationSpeed * Time.deltaTime);
+            if (Quaternion.Angle(xAxisTarget.localRotation, xTargetRotation) < 0.1f)
             {
-                transform.rotation = targetRotation;
-                rotating = false;
+                xAxisTarget.localRotation = xTargetRotation;
+                rotatingX = false;
             }
         }
+        if (rotatingY)
+        {
+            yAxisTarget.rotation = Quaternion.Slerp(yAxisTarget.rotation, yTargetRotation, rotationSpeed * Time.deltaTime);
+            if (Quaternion.Angle(yAxisTarget.rotation, yTargetRotation) < 0.1f)
+            {
+                yAxisTarget.rotation = yTargetRotation;
+                rotatingY = false;
+            }
+        }
+
+
+    }
+    public void SetYRotation(float angleY)
+    {
+        
+        angleY = Mathf.Repeat(angleY, 360f);
+
+        Vector3 currentEuler = yAxisTarget.rotation.eulerAngles;
+        yTargetRotation = Quaternion.Euler(currentEuler.x, angleY, currentEuler.z);
+        rotatingY = true;
     }
 
-    public void SetRotation(float angle)
+    public void SetXRotation(float angleX)
     {
-        if (invertRotation) angle = angle+180;
-        angle = Mathf.Repeat(angle, 360f);
-        targetRotation = Quaternion.Euler(0, angle, 0);
-        rotating = true;
+        angleX = Mathf.Repeat(angleX, 360f);
+
+        Vector3 currentEuler = xAxisTarget.localRotation.eulerAngles;
+        xTargetRotation = Quaternion.Euler(angleX, currentEuler.y, currentEuler.z);
+        rotatingX = true;
     }
+
 }

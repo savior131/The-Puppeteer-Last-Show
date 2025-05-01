@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Phase2 : BossPhase
 {
@@ -6,31 +7,46 @@ public class Phase2 : BossPhase
     [SerializeField] private Transform firePoint;
     [SerializeField] private float fireRate = 1.5f;
     [SerializeField] private ParticleSystem fireEffect;
-    private float fireCooldown;
+    [SerializeField] private float xrotation = -30f;
+    [SerializeField, Range(0, 180)] private float maxRotationAngle = 45f;
 
+
+    private float waitTime;
+    private Coroutine fireRoutine;
 
     public override void StartPhase()
     {
-        fireCooldown = fireRate;
-    }
-
-    public override void UpdatePhase()
-    {
-        fireCooldown -= Time.deltaTime;
-
-        if (fireCooldown <= 0)
-        {
-            angleRotation.SetRotation(Random.Range(-45, 45));
-            fireEffect.Play();
-            fire(projectilePrefab, firePoint);
-            fireCooldown = fireRate;
-        }
+        angleRotation.SetXRotation(xrotation);
+        angleRotation.SetYRotation(Random.Range(-maxRotationAngle, maxRotationAngle));
+        waitTime = fireRate / 2f;
+        fireRoutine = StartCoroutine(FireLoop());
     }
 
     public override void EndPhase()
     {
+        if (fireRoutine != null)
+        {
+            StopCoroutine(fireRoutine);
+        }
+    }
+    public override void UpdatePhase()
+    {
 
     }
 
-}
+    private IEnumerator FireLoop()
+    {
+        yield return new WaitForSeconds(1f);
+        while (true)
+        {
+            angleRotation.SetXRotation(xrotation);
+            angleRotation.SetYRotation(Random.Range(-maxRotationAngle, maxRotationAngle));
 
+            yield return new WaitForSeconds(waitTime);
+
+            fireEffect.Play();
+            fire(projectilePrefab, firePoint);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+}
