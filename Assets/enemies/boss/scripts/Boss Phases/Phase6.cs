@@ -35,7 +35,7 @@ public class Phase6 : BossPhase
     {
         int offset = 0;
         int increment = 5;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         while (true)
         {
          

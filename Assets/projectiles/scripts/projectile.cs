@@ -3,6 +3,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour, IParriable
 {
     [SerializeField] private float speed = 20f;
+    [SerializeField] private float afterParrySpeed = 25f;
     [SerializeField] private float lifeTime = 10f;
     [SerializeField] private bool enableUpwardForce = false;
     [SerializeField] private float upwardForce = 5f;
@@ -127,7 +128,7 @@ public class Projectile : MonoBehaviour, IParriable
         Quaternion randomRot = Quaternion.AngleAxis(randomAngle, Vector3.up);
         Vector3 randomizedDir = randomRot * targetDir;
 
-        rb.linearVelocity = randomizedDir * speed;
+        rb.linearVelocity = randomizedDir * afterParrySpeed;
         transform.forward = randomizedDir;
     }
 

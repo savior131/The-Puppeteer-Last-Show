@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float sprintLerpSpeed = 5f;
     [SerializeField] private Animator animator;
     [SerializeField] private ParticleSystem speedUpParticles;
+    [SerializeField] private Health health;
 
     private Rigidbody rb;
     private Gravity gravity;
@@ -31,6 +32,10 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        if (health.isDead) {
+            rb.linearVelocity = new Vector3(0,rb.linearVelocity.y,0);
+            return;
+                }
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
         moveInput = new Vector3(moveX, 0, moveZ).normalized;

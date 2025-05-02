@@ -4,6 +4,7 @@ public class Attack : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private int maxInputBuffer=3;
+    [SerializeField] private Health health;
     private int comboStep;
     private bool canCombo;
 
@@ -12,6 +13,7 @@ public class Attack : MonoBehaviour
 
     void Update()
     {
+        if (health.isDead) { ResetCombo(); return; }
         if (Input.GetKeyDown(KeyCode.G))
         {
             if (inputBuffer < maxInputBuffer)

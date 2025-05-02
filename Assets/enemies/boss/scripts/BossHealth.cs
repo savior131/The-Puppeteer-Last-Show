@@ -4,11 +4,13 @@ using System.Collections.Generic;
 public class BossHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
-    [SerializeField] private Animator animator;
+    [SerializeField] private List<Animator> animators;
     [SerializeField] private LayerMask damageLayer;
     [SerializeField] private List<DamageSource> damageSources;
     [SerializeField] private BossController bossController;
     [SerializeField] private List<ParticleSystem> damageParticles;
+    [SerializeField] private CameraManager cameraManager;
+
 
     private int currentHealth;
     public int CurrentHealth => currentHealth;
@@ -53,7 +55,10 @@ public class BossHealth : MonoBehaviour
             return;
 
         currentHealth -= damage;
-        animator.SetTrigger("hit");
+        foreach (var animator in animators)
+        {
+            animator.SetTrigger("hit");
+        }
         int phaseIndex = bossController.getCurrentPhaseIndex();
         int totalPhases = bossController.getPhases();
 
@@ -62,7 +67,12 @@ public class BossHealth : MonoBehaviour
             float nextPhaseThreshold = maxHealth - ((phaseIndex + 1) * (maxHealth / totalPhases));
             if (currentHealth <= nextPhaseThreshold)
             {
-                Debug.Log("Next Phase");
+                DestroyAllProjectiles();
+                cameraManager.OverrideCamera("BossCamera", 2f);
+                foreach (var animator in animators)
+                {
+                    animator.SetTrigger("rage");
+                }
                 damageParticles[phaseIndex].Play();
                 bossController.NextPhase();
             }
@@ -75,13 +85,26 @@ public class BossHealth : MonoBehaviour
             Die();
         }
     }
+    public void DestroyAllProjectiles()
+    {
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach (var bullet in bullets)
+        {
+            Destroy(bullet);
+        }
+    }
 
     private void Die()
     {
         if (isDead)
             return;
+        cameraManager.OverrideCamera("BossCamera", 2f);
         bossController.OnDeath();
         isDead = true;
-        animator.SetBool("death",true);
+        foreach (var animator in animators)
+        {
+            animator.SetBool("death", true);
+        }
+        
     }
 }

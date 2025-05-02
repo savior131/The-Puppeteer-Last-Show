@@ -29363,7 +29363,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: 8a80eb792f79b484b8156126d2d3794d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29419,16 +29419,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  afterParrySpeed: 25
   lifeTime: 5
   enableUpwardForce: 0
   upwardForce: 10
   enableWave: 1
   waveFrequency: 3
   waveAmplitude: 14
-  freezeRotationXZ: 1
   waveDelay: 0.3
+  freezeRotationXZ: 1
+  enableTracking: 0
+  trackingDelay: 1
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  trackingRange: 100
   bulletDamage: 10
-  maxParryRandomAngle: 2
+  maxParryRandomAngle: 8
 --- !u!114 &1645134918895480403
 MonoBehaviour:
   m_ObjectHideFlags: 0

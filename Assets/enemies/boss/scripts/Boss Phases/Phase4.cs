@@ -36,24 +36,28 @@ public class Phase4 : BossPhase
 
     private IEnumerator FireLoop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+
+
         while (true)
         {
-            
-            angleRotation.SetXRotation(xrotation);
+            float baseY = Random.Range(-maxRotationAngle, maxRotationAngle);
+            angleRotation.SetYRotation(baseY);
+
             yield return new WaitForSeconds(waitTime);
-            
+
             float[] angleOffsets = { -2f, 0f, 2f };
             foreach (float offset in angleOffsets)
             {
                 fireEffect.Play();
-                angleRotation.SetYRotation(offset);
-                fire(projectilePrefab, firePoint);
+                angleRotation.SetYRotation(baseY + offset);
                 yield return new WaitForSeconds(0.1f);
+                fire(projectilePrefab, firePoint);
+                
             }
 
             yield return new WaitForSeconds(waitTime);
-            angleRotation.SetYRotation(Random.Range(-maxRotationAngle, maxRotationAngle));
         }
     }
+
 }

@@ -13,6 +13,7 @@ public class ParrySystem : MonoBehaviour
     [SerializeField] private LayerMask detectionLayer;
     [SerializeField] private ParticleSystem parryShield;
     [SerializeField] private Animator animator;
+    [SerializeField] private Health health;
    
 
     private bool canParry = true;
@@ -22,7 +23,7 @@ public class ParrySystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && canParry)
+        if (Input.GetKeyDown(KeyCode.F) && canParry&&!health.isDead)
         {
             if (parryWindowRoutine != null)
                 StopCoroutine(parryWindowRoutine);

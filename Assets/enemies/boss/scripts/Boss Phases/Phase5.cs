@@ -49,9 +49,11 @@ public class Phase5 : BossPhase
 
     private IEnumerator FireLoop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+
         while (true)
         {
+
             angleRotation.SetXRotation(xrotation);
 
             if (player == null)
@@ -59,9 +61,9 @@ public class Phase5 : BossPhase
                 angleRotation.SetYRotation(Random.Range(-maxRotationAngle, maxRotationAngle));
             }
 
+            yield return new WaitForSeconds(fireRate);
             fireEffect.Play();
             fire(projectilePrefab, firePoint);
-            yield return new WaitForSeconds(fireRate);
         }
     }
 }
