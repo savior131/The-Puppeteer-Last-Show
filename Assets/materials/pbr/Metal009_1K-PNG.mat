@@ -52,7 +52,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _InvTilingScale: Infinity
+    - _MetallicRemapMax: 1
+    - _MetallicRemapMin: 0
     - _NormalScale: 2
+    - _SmoothnessRemapMax: 0.99999994
+    - _SmoothnessRemapMin: 0
     - _TexWorldScale: 0
     - _UVBase: 5
     m_Colors:
