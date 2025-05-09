@@ -25,14 +25,11 @@ public class Health : MonoBehaviour
 
         if (((1 << gameObject.layer) & damageLayer) != 0 && IsValidTag(gameObject.tag))
         {
-            if (gameObject.TryGetComponent<Projectile>(out Projectile projectile))
+            if (gameObject.TryGetComponent<IDamagingObject>(out IDamagingObject damagingObject))
             {
-                TakeDamage(projectile.damage);
+                TakeDamage(damagingObject.Damage);
             }
-            else if(gameObject.TryGetComponent<ExplosionExpander>(out ExplosionExpander explosionExpander))
-            {
-                TakeDamage(explosionExpander.damage);
-            }
+           
         }
     }
 
