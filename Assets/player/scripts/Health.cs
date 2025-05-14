@@ -23,11 +23,12 @@ public class Health : MonoBehaviour
     {
         if (isDead) return;
 
-        if (((1 << gameObject.layer) & damageLayer) != 0 && IsValidTag(gameObject.tag))
+        if (((1 << gameObject.layer) & damageLayer) != 0 )
         {
             if (gameObject.TryGetComponent<IDamagingObject>(out IDamagingObject damagingObject))
             {
                 TakeDamage(damagingObject.Damage);
+                Debug.Log($"player health is {health}");
             }
            
         }

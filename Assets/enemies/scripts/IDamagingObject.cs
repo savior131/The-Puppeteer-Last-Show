@@ -1,4 +1,4 @@
 public interface IDamagingObject
 {
-    public float Damage { get; }
+    public float Damage { get;  }
 }
