@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Collider damageCollider;
     [SerializeField] private Transform greatSword;
+    [SerializeField] private ImpactFlash impactFlash;
     private float currentHealth;
     public float health => currentHealth;
     [NonSerialized] public bool isDead = false;
@@ -33,6 +34,16 @@ public class Health : MonoBehaviour
             {
                 TakeDamage(explosionExpander.damage);
             }
+            if (gameObject.CompareTag("Trap"))
+            {
+                TakeDamage(10f,false);
+            }
+            if (gameObject.CompareTag("Swing Blade"))
+            {
+                TakeDamage(50f);
+            }
+
+
         }
     }
 
@@ -45,9 +56,13 @@ public class Health : MonoBehaviour
         return false;
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount,bool animation=true)
     {
-        animator.SetTrigger("hit");
+        impactFlash.TriggerFlash();
+        if (animation)
+        {
+        animator.SetTrigger("hit");    
+        }
         currentHealth -= amount;
         if (currentHealth <= 0) Die();
     }
@@ -64,5 +79,12 @@ public class Health : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         ApplyDamage(collision.gameObject);
+    }
+    private void OnTriggerStay(Collider collision)
+    {
+        if (collision.CompareTag("Trap"))
+        {
+            TakeDamage(40f * Time.deltaTime,false);
+        }
     }
 }

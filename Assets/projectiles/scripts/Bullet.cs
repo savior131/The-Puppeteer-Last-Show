@@ -19,31 +19,32 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        DestroyProjectile();
+        DestroyProjectile(other.transform);
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (explosionScript != null)
         {
             explosionScript.TriggerExplosion();
-            DestroyProjectile();
+            DestroyProjectile(collision.transform);
         }
         else
         {
-            DestroyProjectile();
+            DestroyProjectile(collision.transform);
         }
     }
 
-    public void DestroyProjectile()
+    public void DestroyProjectile(Transform collision)
     {
         meshRenderer.enabled = false;
         bulletCollider.enabled = false;
         if (explosionEffect != null)
         {
             
-            explosionEffect.transform.SetParent(null); 
+            explosionEffect.transform.SetParent(collision.transform); 
             explosionEffect.Play();
         }
+
         Destroy(gameObject, destroyDelay);
 
     }

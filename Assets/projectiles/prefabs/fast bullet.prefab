@@ -123,17 +123,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef8215f5a14f2a4faed3f5633298bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 35
+  speed: 40
   afterParrySpeed: 25
   lifeTime: 5
+  freezeRotationXZ: 1
   enableUpwardForce: 0
   upwardForce: 10
   enableWave: 0
   waveFrequency: 5
   waveAmplitude: 1
   waveDelay: 0.5
-  freezeRotationXZ: 1
   enableTracking: 0
+  followPlayer: 0
   trackingDelay: 1
   playerLayer:
     serializedVersion: 2
