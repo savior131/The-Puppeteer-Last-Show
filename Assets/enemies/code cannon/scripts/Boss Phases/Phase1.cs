@@ -36,7 +36,7 @@ public class Phase1 : BossPhase
 
     private IEnumerator FireLoop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         while (true)
         {
             angleRotation.SetXRotation(xrotation);

@@ -70,6 +70,8 @@ public class BossHealth : MonoBehaviour
             {
                 DestroyAllProjectiles();
                 cameraManager.OverrideCamera("BossCamera", 2f);
+                cameraManager.ShakeCamera(0.5f, 0.5f, 2f);
+
                 foreach (var animator in animators)
                 {
                     animator.SetTrigger("rage");

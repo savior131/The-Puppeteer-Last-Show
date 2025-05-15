@@ -28,7 +28,7 @@ public class Phase4 : BossPhase
 
     private IEnumerator FireLoop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
         while (true)
         {
