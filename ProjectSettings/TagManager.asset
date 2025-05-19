@@ -8,6 +8,8 @@ TagManager:
   - Melee
   - Explosion
   - sword
+  - Trap
+  - Swing Blade
   layers:
   - Default
   - TransparentFX

@@ -10,6 +10,7 @@ public class BossHealth : MonoBehaviour
     [SerializeField] private BossController bossController;
     [SerializeField] private List<ParticleSystem> damageParticles;
     [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private ImpactFlash impactFlash;
 
 
     private int currentHealth;
@@ -53,7 +54,7 @@ public class BossHealth : MonoBehaviour
     {
         if (isDead)
             return;
-
+        impactFlash.TriggerFlash();
         currentHealth -= damage;
         foreach (var animator in animators)
         {
@@ -69,6 +70,8 @@ public class BossHealth : MonoBehaviour
             {
                 DestroyAllProjectiles();
                 cameraManager.OverrideCamera("BossCamera", 2f);
+                cameraManager.ShakeCamera(0.5f, 0.5f, 2f);
+
                 foreach (var animator in animators)
                 {
                     animator.SetTrigger("rage");

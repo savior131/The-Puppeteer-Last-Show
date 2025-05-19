@@ -3,7 +3,6 @@ using Unity.Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] private CinemachineBrain brain;
@@ -95,9 +94,9 @@ public class CameraManager : MonoBehaviour
         if (!cameraMap.ContainsKey(currentCamera)) return;
 
         var cam = cameraMap[currentCamera];
-        var noise = cam.GetCinemachineComponent(CinemachineCore.Stage.Noise) as CinemachineBasicMultiChannelPerlin;
+        var noise = cam.GetComponent<CinemachineBasicMultiChannelPerlin>();
 
-        if (noise == null) { Debug.Log("no noise"); return; }
+        if (noise == null) return;
 
         StartCoroutine(ShakeRoutine(noise, amplitude, frequency, duration));
     }
