@@ -4,13 +4,14 @@ ShaderImporter:
   externalObjects: {}
   defaultTextures: []
   nonModifiableTextures: []
+  preprocessorOverride: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 306144
-  packageName: Easy Shockwaves VFX - HDRP
-  packageVersion: 1.0
+  productId: 239742
+  packageName: Free Fire VFX - HDRP
+  packageVersion: 1.0.22
   assetPath: Assets/Vefects/Easy Shockwaves VFX HDRP/_ Extra/Shaders/SH_Vefects_Extra_Billboard_01.shader
-  uploadId: 720131
+  uploadId: 714472

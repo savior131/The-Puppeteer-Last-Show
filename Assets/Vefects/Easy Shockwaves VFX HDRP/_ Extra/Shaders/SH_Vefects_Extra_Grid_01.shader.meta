@@ -2,15 +2,16 @@ fileFormatVersion: 2
 guid: bdec76083a39a714aa7f996f954d5c23
 ShaderImporter:
   externalObjects: {}
-  defaultTextures: []
+  defaultTextures:
+  - _Texture: {fileID: 2800000, guid: 7e86780f8818d774781e18cdb159f2f7, type: 3}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 306144
-  packageName: Easy Shockwaves VFX - HDRP
-  packageVersion: 1.0
+  productId: 239742
+  packageName: Free Fire VFX - HDRP
+  packageVersion: 1.0.22
   assetPath: Assets/Vefects/Easy Shockwaves VFX HDRP/_ Extra/Shaders/SH_Vefects_Extra_Grid_01.shader
-  uploadId: 720131
+  uploadId: 714472
