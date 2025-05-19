@@ -14,8 +14,9 @@ public class CodeDefendAttack : MonoBehaviour
     bool isInRagePhase = false;
 
     Animator animator;
+    public static bool isDead = false;
 
-    
+
 
     void Start()
     {
@@ -30,24 +31,25 @@ public class CodeDefendAttack : MonoBehaviour
 
     IEnumerator RagePhase()
     {
-        isInRagePhase = true;
-        timer = rageTimer;
-        cooldown = attackCoolDown;
+        
+            isInRagePhase = true;
+            timer = rageTimer;
+            cooldown = attackCoolDown;
 
-        animator.SetTrigger("rage");
+            animator.SetTrigger("rage");
 
-        while (timer > 0f)
-        {
-            timer -= 0.3f;
-
-            if (cooldown > 0f)
+            while (timer > 0f)
             {
-                cooldown -= 0.3f;
+                timer -= 0.3f;
+
+                if (cooldown > 0f)
+                {
+                    cooldown -= 0.3f;
+                }
+
+                yield return new WaitForSeconds(0.3f);
             }
-
-            yield return new WaitForSeconds(0.3f);
-        }
-
+        
         raged = false;
         isInRagePhase = false;
         Debug.Log("Rage phase ended.");
@@ -55,8 +57,10 @@ public class CodeDefendAttack : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        if(isDead) return;
         if (collision.collider.CompareTag("Player") && cooldown <= 0f && isInRagePhase)
         {
+
             Debug.Log("Attacking player!");
             animator.SetTrigger("attack");
             cooldown = attackCoolDown;
@@ -65,6 +69,10 @@ public class CodeDefendAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(isDead)
+        {
+            return;
+        }
         if (other.gameObject.CompareTag("sword"))
         {
             if (!raged)

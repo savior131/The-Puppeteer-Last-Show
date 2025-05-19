@@ -13,6 +13,7 @@ public class HummerParry : MonoBehaviour,IParriable
         animator.Play("hit", 0, 0f);
         collider.enabled = false;
         animator.SetTrigger("death");
+        CodeDefendAttack.isDead = true;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

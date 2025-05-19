@@ -3,9 +3,9 @@ using UnityEngine;
 public class EnemyFollowPlayer : MonoBehaviour
 {
     [SerializeField] Transform player; // Assign your player object here in the Inspector
-
     void Update()
     {
+       
         if (player != null)
         {
             // Look at the player

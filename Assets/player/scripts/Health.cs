@@ -31,7 +31,14 @@ public class Health : MonoBehaviour
                 TakeDamage(damagingObject.Damage);
                 Debug.Log($"player health is {health}");
             }
-
+            if (gameObject.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                TakeDamage(projectile.damage);
+            }
+            else if (gameObject.TryGetComponent<ExplosionExpander>(out ExplosionExpander explosionExpander))
+            {
+                TakeDamage(explosionExpander.damage);
+            }
             if (gameObject.CompareTag("Trap"))
             {
                 TakeDamage(10f,false);

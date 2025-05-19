@@ -1104,6 +1104,79 @@ Transform:
   - {fileID: 1565633798}
   m_Father: {fileID: 1671275056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &548764520
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.6188447
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -15.193142
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170723874946497987, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1640662400568332840, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: m_Name
+      value: code bomb
+      objectReference: {fileID: 0}
+    - target: {fileID: 5022675697233576504, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: bigRange
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5022675697233576504, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: smallRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5022675697233576504, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: sprintSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7779315655781793028, guid: 3605221084cc9894f981bf961e367de5, type: 3}
+      propertyPath: maxRadius
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3605221084cc9894f981bf961e367de5, type: 3}
 --- !u!1 &668806479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,6 +1920,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 607121351645116205, guid: 661ae04ec2fc1244ab4e298450b170a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 607121351645116205, guid: 661ae04ec2fc1244ab4e298450b170a7, type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
@@ -1941,7 +2018,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1105981761}
   - component: {fileID: 1105981762}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: mixamorig:LegRight
   m_TagString: sword
   m_Icon: {fileID: 0}
@@ -2810,6 +2887,7 @@ MonoBehaviour:
   animator: {fileID: 1998433094}
   damageCollider: {fileID: 1398779694}
   greatSword: {fileID: 1453486560}
+  impactFlash: {fileID: 0}
 --- !u!114 &1398779700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3086,6 +3164,10 @@ PrefabInstance:
       value: organic great sword
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d40dc96ccd88caa4b861ae2629b46f52, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d40dc96ccd88caa4b861ae2629b46f52, type: 3}
       propertyPath: m_TagString
       value: sword
       objectReference: {fileID: 0}
@@ -3174,7 +3256,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 951
+    m_Bits: 695
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -4887,3 +4969,4 @@ SceneRoots:
   - {fileID: 1617656331}
   - {fileID: 226996217}
   - {fileID: 1091393852}
+  - {fileID: 548764520}
