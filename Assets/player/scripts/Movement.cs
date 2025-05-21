@@ -23,6 +23,8 @@ public class Movement : MonoBehaviour
     private float moveX, moveZ;
     private float currentSprintFactor = 1f;
 
+    private bool enableControl = true;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -36,9 +38,16 @@ public class Movement : MonoBehaviour
         if (health.isDead) {
             rb.linearVelocity = new Vector3(0,rb.linearVelocity.y,0);
             return;
-                }
+        }
+        if (!enableControl)
+        {
+            rb.linearVelocity = Vector3.zero;
+
+        }
+     
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
+        
         if (flipMovement)
         {
             moveX = -moveX;
@@ -129,4 +138,9 @@ public class Movement : MonoBehaviour
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
+    public void EnableControl(bool enable)
+    {
+        enableControl = enable;
+    }
+
 }

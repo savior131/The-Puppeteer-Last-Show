@@ -9,7 +9,10 @@ public class Health : MonoBehaviour
     [SerializeField] private string[] damageTags;
     [SerializeField] private Animator animator;
     [SerializeField] private Collider damageCollider;
-    [SerializeField] private Transform greatSword;
+    [SerializeField] private GameObject greatSword;
+    [SerializeField] private GameObject swordPrefab;
+    [SerializeField] private CheckpointManager checkpointManager;
+    private GameObject droppedSwordInstance;
     [SerializeField] private ImpactFlash impactFlash;
     private float currentHealth;
     public float health => currentHealth;
@@ -26,6 +29,8 @@ public class Health : MonoBehaviour
 
         if (((1 << gameObject.layer) & damageLayer) != 0 )
         {
+            if (!IsValidTag(gameObject.tag)) return;
+
             if (gameObject.TryGetComponent<IDamagingObject>(out IDamagingObject damagingObject))
             {
                 TakeDamage(damagingObject.Damage);
@@ -47,8 +52,14 @@ public class Health : MonoBehaviour
             {
                 TakeDamage(50f);
             }
-
-
+            if (gameObject.CompareTag("Water"))
+            {
+                TakeDamage(20,false);
+                if (!isDead)
+                {
+                    checkpointManager.Respawn();
+                }
+            }
         }
     }
 
@@ -69,18 +80,37 @@ public class Health : MonoBehaviour
         animator.SetTrigger("hit");    
         }
         currentHealth -= amount;
-        if (currentHealth <= 0) Die();
+        if (currentHealth <= 0) {
+            currentHealth = 0;
+            Die();
+        }
     }
 
     private void Die()
     {
         isDead = true;
         animator.SetBool("death", true);
-        greatSword.SetParent(null);
         damageCollider.enabled = false;
 
+        greatSword.gameObject.SetActive(false);
+
+        droppedSwordInstance = Instantiate(swordPrefab, greatSword.transform);
+        droppedSwordInstance.SetActive(true);
+        droppedSwordInstance.transform.SetParent(null);
+
+        var rb = droppedSwordInstance.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+         ApplyDamage(collision.gameObject);
+       
+    }
     private void OnTriggerEnter(Collider collision)
     {
         ApplyDamage(collision.gameObject);
@@ -92,4 +122,28 @@ public class Health : MonoBehaviour
             TakeDamage(40f * Time.deltaTime,false);
         }
     }
+    public void ResetPlayer(Transform spawnPoint)
+    {
+
+        if (!isDead)
+        {
+            transform.position = spawnPoint.position;
+            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+            animator.Play("idle", 0, 0f);
+            return;
+        }
+
+        isDead = false;
+        currentHealth = maxHealth;
+        damageCollider.enabled = true;
+
+        transform.position = spawnPoint.position;
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+
+        animator.SetBool("death", false);
+        animator.Play("idle", 0, 0f);
+        greatSword.SetActive(true);
+
+    }
+
 }

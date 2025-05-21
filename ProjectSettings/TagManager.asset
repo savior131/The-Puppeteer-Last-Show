@@ -11,6 +11,7 @@ TagManager:
   - Trap
   - Swing Blade
   - Flame
+  - Water
   layers:
   - Default
   - TransparentFX
