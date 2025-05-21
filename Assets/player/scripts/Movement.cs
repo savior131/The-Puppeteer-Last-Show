@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private ParticleSystem speedUpParticles;
     [SerializeField] private Health health;
+    [SerializeField] private bool flipMovement= false;
 
     private Rigidbody rb;
     private Gravity gravity;
@@ -38,6 +39,11 @@ public class Movement : MonoBehaviour
                 }
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
+        if (flipMovement)
+        {
+            moveX = -moveX;
+            moveZ = -moveZ;
+        }
         moveInput = new Vector3(moveX, 0, moveZ).normalized;
 
         isSprinting = Input.GetKey(KeyCode.LeftShift) && !stamina.IsDrained;

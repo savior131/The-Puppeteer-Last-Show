@@ -10,6 +10,7 @@ TagManager:
   - sword
   - Trap
   - Swing Blade
+  - Flame
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Trap
   - Player
   - Enemy
   - Attacks
