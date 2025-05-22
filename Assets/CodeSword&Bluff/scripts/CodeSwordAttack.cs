@@ -28,7 +28,7 @@ public class CodeSwordAttack : MonoBehaviour
 
     [SerializeField] private float attackCooldown = 2f;
     bool canAttack = true;
-    bool isdead;
+    public bool isdead;
     
     private Collider[] allChildColliders;
 
@@ -54,6 +54,7 @@ public class CodeSwordAttack : MonoBehaviour
         if (enemyType == enemySwordType.BLUFF)
             randomFeintsCount = Random.Range(1, 3);
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        agent.updateRotation = false;
     }
     public void isDead()
     {
