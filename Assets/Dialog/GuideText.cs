@@ -28,7 +28,7 @@ public class GuideText : MonoBehaviour
             displayedText.DOFade(0, timeBetweenChars);
             yield return new WaitForSeconds(timeBetweenChars); // Wait for fade out
         }
-        SceneFade.Instance.FadeToScene("startup scene");
+        SceneFade.Instance.FadeToScene(sceneToLoad);
 
         // Optional: disable GameObject
         // gameObject.SetActive(false);
