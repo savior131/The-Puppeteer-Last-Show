@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Dialog/Main Menu.unity
+    path: Assets/Dialog/main menu.unity
     guid: ffd7dd708cfe8c142a8cfa3007aa8e82
   - enabled: 1
-    path: Assets/Dialog/Intro.unity
+    path: Assets/Dialog/intro.unity
     guid: 965350e5569ff1747a95ee51492f8cd7
   - enabled: 1
     path: Assets/scenes/startup scene.unity
@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/scenes/boss end.unity
     guid: a7a8eb19f4293ff4ab2a6818354bdb3a
+  - enabled: 1
+    path: Assets/Dialog/ending.unity
+    guid: 8fd01725eb368364595acdaaa5f0e7dd
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
   m_UseUCBPForAssetBundles: 0

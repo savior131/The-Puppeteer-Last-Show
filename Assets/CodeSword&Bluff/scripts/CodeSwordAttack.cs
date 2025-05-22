@@ -76,9 +76,19 @@ public class CodeSwordAttack : MonoBehaviour
     IEnumerator changePositionWhenDead()
     {
         yield return new WaitForSeconds(1.69f);
-        Vector3 pos = transform.position;
-        pos.y -= 1f;
-        transform.position = pos;
+        Vector3 start = transform.position;
+        Vector3 target = start + Vector3.up * -1f;
+        float duration = 0.2f; // time to complete movement
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(start, target, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = target; // ensure exact final position
     }
     private void Update()
     {

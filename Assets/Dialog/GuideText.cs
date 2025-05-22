@@ -10,6 +10,7 @@ public class GuideText : MonoBehaviour
     [SerializeField] List<string> text = new List<string>();
     [SerializeField] float timeBetweenChars = 2f;
     [SerializeField] TextMeshProUGUI displayedText;
+    [SerializeField] string sceneToLoad = "startup scene";
 
     private void OnEnable()
     {
@@ -27,7 +28,7 @@ public class GuideText : MonoBehaviour
             displayedText.DOFade(0, timeBetweenChars);
             yield return new WaitForSeconds(timeBetweenChars); // Wait for fade out
         }
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneFade.Instance.FadeToScene("startup scene");
 
         // Optional: disable GameObject
         // gameObject.SetActive(false);

@@ -5,7 +5,7 @@ public class Navigation : MonoBehaviour
     
     public void Play()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        SceneFade.Instance.FadeToScene("intro");
     }
     public void exit()
     {
