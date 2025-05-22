@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
@@ -17,17 +18,20 @@ public class Health : MonoBehaviour
     private float currentHealth;
     public float health => currentHealth;
     [NonSerialized] public bool isDead = false;
-
+    private Rigidbody rb;
     private void Awake()
     {
         currentHealth = maxHealth;
     }
-
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     private void ApplyDamage(GameObject gameObject)
     {
         if (isDead) return;
 
-        if (((1 << gameObject.layer) & damageLayer) != 0 )
+        if (((1 << gameObject.layer) & damageLayer) != 0)
         {
             if (!IsValidTag(gameObject.tag)) return;
 
@@ -46,7 +50,7 @@ public class Health : MonoBehaviour
             }
             if (gameObject.CompareTag("Trap"))
             {
-                TakeDamage(10f,false);
+                TakeDamage(10f, false);
             }
             if (gameObject.CompareTag("Swing Blade"))
             {
@@ -54,7 +58,7 @@ public class Health : MonoBehaviour
             }
             if (gameObject.CompareTag("Water"))
             {
-                TakeDamage(20,false);
+                TakeDamage(20, false);
                 if (!isDead)
                 {
                     checkpointManager.Respawn();
@@ -72,15 +76,16 @@ public class Health : MonoBehaviour
         return false;
     }
 
-    public void TakeDamage(float amount,bool animation=true)
+    public void TakeDamage(float amount, bool animation = true)
     {
         impactFlash.TriggerFlash();
         if (animation)
         {
-        animator.SetTrigger("hit");    
+            animator.SetTrigger("hit");
         }
         currentHealth -= amount;
-        if (currentHealth <= 0) {
+        if (currentHealth <= 0)
+        {
             currentHealth = 0;
             Die();
         }
@@ -108,18 +113,22 @@ public class Health : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-         ApplyDamage(collision.gameObject);
-       
+        ApplyDamage(collision.gameObject);
+
     }
     private void OnTriggerEnter(Collider collision)
     {
+        if (collision.gameObject.CompareTag("Door"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        }
         ApplyDamage(collision.gameObject);
     }
     private void OnTriggerStay(Collider collision)
     {
         if (collision.CompareTag("Trap"))
         {
-            TakeDamage(40f * Time.deltaTime,false);
+            TakeDamage(40f * Time.deltaTime, false);
         }
     }
     public void ResetPlayer(Transform spawnPoint)
@@ -127,8 +136,8 @@ public class Health : MonoBehaviour
 
         if (!isDead)
         {
-            transform.position = spawnPoint.position;
-            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+            rb.position = spawnPoint.position;
+            rb.linearVelocity = Vector3.zero;
             animator.Play("idle", 0, 0f);
             return;
         }
@@ -137,8 +146,8 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         damageCollider.enabled = true;
 
-        transform.position = spawnPoint.position;
-        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        rb.position = spawnPoint.position;
+        rb.linearVelocity = Vector3.zero;
 
         animator.SetBool("death", false);
         animator.Play("idle", 0, 0f);

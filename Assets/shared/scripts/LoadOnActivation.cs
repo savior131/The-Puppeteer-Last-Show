@@ -7,6 +7,9 @@ public class LoadOnActivation : MonoBehaviour
 
     void OnEnable()
     {
+
+
+
         if (IsSceneInBuild(sceneName))
         {
             SceneFade.Instance.FadeToScene(sceneName);

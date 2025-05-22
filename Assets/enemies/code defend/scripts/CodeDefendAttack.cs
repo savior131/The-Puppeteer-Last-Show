@@ -6,6 +6,8 @@ public class CodeDefendAttack : MonoBehaviour
     [SerializeField] float rageTimer = 15f;
     [SerializeField] int rageTrigger = 3;
     [SerializeField] float attackCoolDown = 5f;
+    [SerializeField] Collider wall;
+    [HideInInspector] public bool isDead = false;
 
     float timer;
     float cooldown;
@@ -14,15 +16,14 @@ public class CodeDefendAttack : MonoBehaviour
     bool isInRagePhase = false;
 
     Animator animator;
-    public static bool isDead = false;
-
+    ImpactFlash impact;
 
 
     void Start()
     {
         rage = rageTrigger;
         animator = GetComponentInChildren<Animator>();
-
+        impact = GetComponent<ImpactFlash>();
         if (animator == null)
         {
             Debug.LogError("Animator not found in children!");
@@ -54,10 +55,34 @@ public class CodeDefendAttack : MonoBehaviour
         isInRagePhase = false;
         Debug.Log("Rage phase ended.");
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (isDead)
+        {
+            if (wall != null)
+            {
+                wall.enabled = false;
+            }
+            return;
+        }
+        if (other.gameObject.CompareTag("Player") && cooldown <= 0f && isInRagePhase)
+        {
 
+            Debug.Log("Attacking player!");
+            animator.SetTrigger("attack");
+            cooldown = attackCoolDown;
+        }
+    }
     private void OnCollisionStay(Collision collision)
     {
-        if(isDead) return;
+        if (isDead)
+        {
+            if(wall != null)
+            {
+                wall.enabled = false;
+            }    
+            return;
+        }
         if (collision.collider.CompareTag("Player") && cooldown <= 0f && isInRagePhase)
         {
 
@@ -78,6 +103,8 @@ public class CodeDefendAttack : MonoBehaviour
             if (!raged)
             {
                 rage--;
+                impact.TriggerFlash();
+                animator.SetTrigger("hit");
                 Debug.Log($"Parried! Rage left: {rage}");
             }
 

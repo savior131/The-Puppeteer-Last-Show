@@ -12,6 +12,7 @@ TagManager:
   - Swing Blade
   - Flame
   - Water
+  - Door
   layers:
   - Default
   - TransparentFX

@@ -2,9 +2,16 @@ using UnityEngine;
 
 public class EnemyFollowPlayer : MonoBehaviour
 {
-    [SerializeField] Transform player; // Assign your player object here in the Inspector
+    Transform player; // Assign your player object here in the Inspector
+    CodeDefendAttack attack;
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        attack=GetComponentInParent<CodeDefendAttack>();
+    }
     void Update()
     {
+        if(attack.isDead) return;   
        
         if (player != null)
         {

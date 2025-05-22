@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GuideText : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class GuideText : MonoBehaviour
             displayedText.DOFade(0, timeBetweenChars);
             yield return new WaitForSeconds(timeBetweenChars); // Wait for fade out
         }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
         // Optional: disable GameObject
         // gameObject.SetActive(false);

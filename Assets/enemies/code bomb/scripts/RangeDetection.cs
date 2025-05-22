@@ -1,4 +1,7 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RangeDetection : MonoBehaviour
 {
@@ -14,15 +17,19 @@ public class RangeDetection : MonoBehaviour
     private Stamina playerStamina;
     private Animator animator;
     private Explosion explosion;
+    private NavMeshAgent agent;
+    private Coroutine runningCoroutine;
 
     private bool isSprinting;
     private bool inBigRange = false;
     private bool inSmallRange = false;
     private bool isDead = false;
-
+    private bool hasScreamed = false;
+    bool isScreaming = false;
     private void Start()
     {
         player = GameObject.FindWithTag("Player");
+        agent = GetComponent<NavMeshAgent>();
 
         if (player != null)
         {
@@ -55,25 +62,72 @@ public class RangeDetection : MonoBehaviour
 
         inSmallRange = distance < smallRange;
         inBigRange = distance < bigRange;
+        //isScreaming = animator.GetCurrentAnimatorStateInfo(0).IsName("scream");
 
         if (inSmallRange)
         {
+            if (runningCoroutine != null)
+            {
+                StopCoroutine(runningCoroutine);
+                runningCoroutine = null;
+            }
             TriggerExplosion();
         }
         else if (inBigRange && isSprinting)
         {
-            Debug.Log("PATH FINDINGGGGGG");
-            // Add pathfinding logic here
+
+            if (runningCoroutine == null)
+            {
+                runningCoroutine = StartCoroutine(runCoroutine());
+
+            }
+
+        }
+        else
+        {
+            if (runningCoroutine != null)
+            {
+                StopCoroutine(runningCoroutine);
+                runningCoroutine = null;
+            }
+            hasScreamed = false;
+            animator.SetFloat("velocity", 0.05f);
+            agent.isStopped = true;
         }
     }
-
+    IEnumerator runCoroutine()
+    {
+        agent.isStopped = true;
+        Debug.Log("PATH FINDINGGGGGG");
+        // Add pathfinding logic here
+        if (!hasScreamed)
+        {
+            animator.SetTrigger("scream");
+            hasScreamed = true;
+        }
+        yield return new WaitUntil(() =>
+                animator.GetCurrentAnimatorStateInfo(0).IsName("scream"));
+        yield return new WaitWhile(() =>
+                animator.GetCurrentAnimatorStateInfo(0).IsName("scream") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+        animator.SetFloat("velocity", 0.15f);
+        agent.isStopped = false;
+        Debug.Log("start movnig");
+        agent.SetDestination(player.transform.position);
+    }
     private void TriggerExplosion()
     {
         if (isDead) return;
 
         explosion?.TriggerExplosion();
         isDead = true;
+        agent.isStopped = true;
         animator?.SetTrigger("death");
+        if (runningCoroutine != null)
+        {
+            StopCoroutine(runningCoroutine);
+            runningCoroutine = null;
+        }
+
     }
 
     // Draw gizmos in editor to visualize ranges

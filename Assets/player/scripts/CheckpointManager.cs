@@ -8,7 +8,7 @@ public class CheckpointManager : MonoBehaviour
     private Health health;
     private void Update()
     {
-        if (Input.GetKey(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             Respawn();
         }
