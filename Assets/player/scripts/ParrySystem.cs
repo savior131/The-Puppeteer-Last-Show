@@ -44,6 +44,7 @@ public class ParrySystem : MonoBehaviour
         {
             if (CheckForParryableTargets())
             {
+                
                 parrySuccessful = true;
                 break;
             }
@@ -53,6 +54,7 @@ public class ParrySystem : MonoBehaviour
 
         if (parrySuccessful)
         {
+            Debug.Log("was parried");
             ParryTargetsInRadius();
         }
 

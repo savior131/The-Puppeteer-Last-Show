@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private ParticleSystem speedUpParticles;
     [SerializeField] private Health health;
+    [SerializeField] private bool flipMovement= false;
 
     private Rigidbody rb;
     private Gravity gravity;
@@ -21,6 +22,8 @@ public class Movement : MonoBehaviour
     private bool isSprinting;
     private float moveX, moveZ;
     private float currentSprintFactor = 1f;
+
+    private bool enableControl = true;
 
     void Awake()
     {
@@ -35,9 +38,21 @@ public class Movement : MonoBehaviour
         if (health.isDead) {
             rb.linearVelocity = new Vector3(0,rb.linearVelocity.y,0);
             return;
-                }
+        }
+        if (!enableControl)
+        {
+            rb.linearVelocity = Vector3.zero;
+
+        }
+     
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
+        
+        if (flipMovement)
+        {
+            moveX = -moveX;
+            moveZ = -moveZ;
+        }
         moveInput = new Vector3(moveX, 0, moveZ).normalized;
 
         isSprinting = Input.GetKey(KeyCode.LeftShift) && !stamina.IsDrained;
@@ -123,4 +138,9 @@ public class Movement : MonoBehaviour
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
+    public void EnableControl(bool enable)
+    {
+        enableControl = enable;
+    }
+
 }

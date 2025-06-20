@@ -7,8 +7,12 @@ TagManager:
   - Bullet
   - Melee
   - Explosion
+  - sword
   - Trap
   - Swing Blade
+  - Flame
+  - Water
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -16,7 +20,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Trap
   - Player
   - Enemy
   - Attacks
